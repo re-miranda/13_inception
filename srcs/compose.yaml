@@ -1,0 +1,47 @@
+services:
+  database:
+    image:    mariadb
+    env_file:
+      - .env
+    build:
+      context:  mariadb
+      args:
+        - WORDPRESS_DATABASE
+        - WORDPRESS_USER
+        - WORDPRESS_PASSWORD
+    restart:  always
+    networks:
+      - inception
+    volumes:
+      - ./home/rmiranda/data/mariadb:/var/lib/mysql
+  wordpress:
+    image:  wordpress
+    env_file:
+      - .env
+    build:
+      context:  wordpress
+      args:
+        - WORDPRESS_DATABASE
+        - WORDPRESS_USER
+        - WORDPRESS_PASSWORD
+    networks:
+      - inception
+    volumes:
+      - ./home/rmiranda/data/wordpress:/var/www/html
+    depends_on:
+      - database
+  nginx_server:
+    image:  nginx
+    build:
+      context:  nginx
+    networks:
+      - inception
+    ports:
+      - 443:443
+    volumes:
+      - ./home/rmiranda/data/wordpress:/var/www/html
+    depends_on:
+      - wordpress
+networks:
+  inception:
+    name: inception
