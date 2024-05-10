@@ -1,5 +1,9 @@
 FROM debian:11
 
+ARG WORDPRESS_DATABASE
+ARG WORDPRESS_USER
+ARG WORDPRESS_PASSWORD
+
 RUN apt update -y && apt upgrade -y
 
 RUN apt install mariadb-server -y
@@ -10,9 +14,9 @@ skip-bind-address" >> /etc/mysql/my.cnf
 
 RUN service mariadb start && \
 	mariadb -u root -e \
-	"CREATE DATABASE IF NOT EXISTS wordpress_db; \
-	CREATE USER 'wuser'@'%' identified by 'wpass'; \
-	GRANT ALL ON wordpress_db.* TO 'wuser'@'%' IDENTIFIED BY 'wpass'; \
+	"CREATE DATABASE IF NOT EXISTS $WORDPRESS_DATABASE; \
+	CREATE USER '$WORDPRESS_USER'@'%' identified by '$WORDPRESS_PASSWORD'; \
+	GRANT ALL ON wordpress_db.* TO '$WORDPRESS_USER'@'%' IDENTIFIED BY '$WORDPRESS_PASSWORD'; \
 	FLUSH PRIVILEGES;" && \
 	service mariadb stop
 

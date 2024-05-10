@@ -1,8 +1,7 @@
+name: inception
 services:
   database:
     image:    mariadb
-    env_file:
-      - .env
     build:
       context:  mariadb
       args:

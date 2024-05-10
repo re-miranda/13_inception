@@ -1,5 +1,9 @@
 FROM debian:11
 
+ARG WORDPRESS_DATABASE
+ARG WORDPRESS_USER
+ARG WORDPRESS_PASSWORD
+
 RUN apt update -y && apt upgrade -y
 
 RUN apt install -y php-mysql php-fpm mariadb-client wget
@@ -16,9 +20,9 @@ RUN wget https://wordpress.org/latest.tar.gz && \
 	rm -rf latest.tar.gz
 
 RUN cp wp-config-sample.php wp-config.php && \
-	sed -i "s/database_name_here/wordpress_db/g" wp-config.php && \
-	sed -i "s/username_here/wuser/g" wp-config.php && \
-	sed -i "s/password_here/wpass/g" wp-config.php && \
+	sed -i "s/database_name_here/$WORDPRESS_DATABASE/g" wp-config.php && \
+	sed -i "s/username_here/$WORDPRESS_USER/g" wp-config.php && \
+	sed -i "s/password_here/$WORDPRESS_PASSWORD/g" wp-config.php && \
 	sed -i "s/localhost/mariadb/g" wp-config.php
 
 RUN mkdir -p /run/php
