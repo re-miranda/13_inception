@@ -3,7 +3,7 @@ services:
   database:
     image:    mariadb
     build:
-      context:  mariadb
+      context:  requirements/mariadb
       args:
         - WORDPRESS_DATABASE
         - WORDPRESS_USER
@@ -18,7 +18,7 @@ services:
     env_file:
       - .env
     build:
-      context:  wordpress
+      context:  requirements/wordpress
       args:
         - WORDPRESS_DATABASE
         - WORDPRESS_USER
@@ -32,7 +32,7 @@ services:
   nginx_server:
     image:  nginx
     build:
-      context:  nginx
+      context:  requirements/nginx
     networks:
       - inception
     ports:
