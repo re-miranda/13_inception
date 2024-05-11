@@ -4,11 +4,11 @@ ARG WORDPRESS_DATABASE
 ARG WORDPRESS_USER
 ARG WORDPRESS_PASSWORD
 
+WORKDIR /var/www/html/
+
 RUN apt update -y && apt upgrade -y
 
 RUN apt install -y php-mysql php-fpm mariadb-client wget
-
-WORKDIR /var/www/html/
 
 RUN sed -i.default "/^listen\s=.*/c\listen = 0.0.0.0:9000" \
 	/etc/php/[0-9]*.[0-9]*/fpm/pool.d/www.conf

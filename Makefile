@@ -4,28 +4,35 @@ COMPOSE	=	srcs/docker-compose.yaml
 LOGIN	=	rmiranda
 DATA_PATH	=	$(HOME)/$(LOGIN)/data
 
+ifeq ($(shell uname),Darwin)
+VOLUMES_PATH	:= $(HOME)/data
+endif
+
 export $(DATA_PATH)
 
 all: $(ENV) up
+
+up: setup
+	docker compose --file=$(COMPOSE) up --build --detach
 
 setup: $(ENV)
 	mkdir -p $(DATA_PATH)/wordpress
 	mkdir -p $(DATA_PATH)/mariadb
 	grep VOLUMES_PATH srcs/.env || echo "VOLUMES_PATH=$(DATA_PATH)" >> srcs/.env
 
-up: setup
-	docker compose --file=$(COMPOSE) up --build --detach
-
-down:
-	docker compose down
-
 $(ENV):
 	@echo "missing .env in srcs directory"
 
-clean:
+down:
+	cd srcs && docker compose down -v
 
-fclen:
+vdown:
+	cd srcs && docker compose down -v
 
-re:
+clean: down
 
-.PHONY: all setup up down clean fclean re
+fclean: vdown
+
+re: fclean all
+
+.PHONY: all setup up down vdown clean fclean re

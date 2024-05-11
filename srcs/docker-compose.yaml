@@ -1,6 +1,7 @@
 name: inception
+
 services:
-  database:
+  mariadb:
     image:    mariadb
     build:
       context:  requirements/mariadb
@@ -8,15 +9,12 @@ services:
         - WORDPRESS_DATABASE
         - WORDPRESS_USER
         - WORDPRESS_PASSWORD
-    restart:  always
     networks:
       - inception
     volumes:
-      - ./home/rmiranda/data/mariadb:/var/lib/mysql
+      - volume_mariadb:/var/lib/mysql
   wordpress:
     image:  wordpress
-    env_file:
-      - .env
     build:
       context:  requirements/wordpress
       args:
@@ -26,9 +24,9 @@ services:
     networks:
       - inception
     volumes:
-      - ./home/rmiranda/data/wordpress:/var/www/html
+      - volume_wordpress:/var/www/html
     depends_on:
-      - database
+      - mariadb
   nginx_server:
     image:  nginx
     build:
@@ -38,9 +36,22 @@ services:
     ports:
       - 443:443
     volumes:
-      - ./home/rmiranda/data/wordpress:/var/www/html
+      - volume_wordpress:/var/www/html
     depends_on:
       - wordpress
+
 networks:
   inception:
     name: inception
+
+volumes:
+  volume_mariadb:
+    driver_opts:
+      o: bind
+      type: none
+      device: ${VOLUMES_PATH}/mariadb
+  volume_wordpress:
+    driver_opts:
+      o: bind
+      type: none
+      device: ${VOLUMES_PATH}/wordpress
