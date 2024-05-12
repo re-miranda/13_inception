@@ -24,7 +24,7 @@ $(ENV):
 	@echo "missing .env in srcs directory"
 
 down:
-	cd srcs && docker compose down -v
+	cd srcs && docker compose down
 
 vdown:
 	cd srcs && docker compose down -v
