@@ -2,13 +2,13 @@ NAME = inception
 ENV		=	srcs/.env
 COMPOSE	=	srcs/docker-compose.yaml
 LOGIN	=	rmiranda
-DATA_PATH	=	$(HOME)/$(LOGIN)/data
+VOLUMES_PATH	=	$(HOME)/$(LOGIN)/data
 
 ifeq ($(shell uname),Darwin)
-VOLUMES_PATH	:= $(HOME)/data
+VOLUMES_PATH	= $(HOME)/data
 endif
 
-export $(DATA_PATH)
+export $(VOLUMES_PATH)
 
 all: $(ENV) up
 
@@ -16,9 +16,9 @@ up: setup
 	docker compose --file=$(COMPOSE) up --build --detach
 
 setup: $(ENV)
-	mkdir -p $(DATA_PATH)/wordpress
-	mkdir -p $(DATA_PATH)/mariadb
-	grep VOLUMES_PATH srcs/.env || echo "VOLUMES_PATH=$(DATA_PATH)" >> srcs/.env
+	mkdir -p $(VOLUMES_PATH)/wordpress
+	mkdir -p $(VOLUMES_PATH)/mariadb
+	grep VOLUMES_PATH srcs/.env || echo "VOLUMES_PATH=$(VOLUMES_PATH)" >> srcs/.env
 
 $(ENV):
 	@echo "missing .env in srcs directory"
@@ -32,6 +32,8 @@ vdown:
 clean: down
 
 fclean: vdown
+	rm -rf $(VOLUMES_PATH)/wordpress
+	rm -rf $(VOLUMES_PATH)/mariadb
 
 re: fclean all
 
