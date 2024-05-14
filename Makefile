@@ -13,7 +13,7 @@ export $(VOLUMES_PATH)
 all: $(ENV) up
 
 up: setup
-	cd srcs && docker compose up --build --detach
+	cd srcs && docker compose up -d
 
 setup: $(ENV)
 	mkdir -p $(VOLUMES_PATH)/wordpress
