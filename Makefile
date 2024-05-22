@@ -1,4 +1,4 @@
-NAME = inception
+NAME	=	inception
 ENV		=	srcs/.env
 COMPOSE	=	srcs/docker-compose.yaml
 LOGIN	=	rmiranda
@@ -13,7 +13,7 @@ export $(VOLUMES_PATH)
 all: $(ENV) up hosts
 
 hosts:
-	@if ! grep "rmiranda.42.fr" /etc/hosts; then \
+	-@if ! grep "rmiranda.42.fr" /etc/hosts; then \
 	sudo sed -i '2i\127.0.0.1\trmiranda.42.fr' /etc/hosts; \
 	fi
 
