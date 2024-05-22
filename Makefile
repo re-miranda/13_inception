@@ -18,7 +18,7 @@ hosts:
 	fi
 
 up: setup
-	cd srcs && docker compose up -d
+	cd srcs && docker compose up -d --build
 
 setup: $(ENV)
 	mkdir -p $(VOLUMES_PATH)/wordpress
