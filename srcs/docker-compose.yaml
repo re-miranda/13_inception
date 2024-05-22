@@ -13,6 +13,7 @@ services:
       - inception
     volumes:
       - volume_mariadb:/var/lib/mysql
+    restart: on-failure
   wordpress:
     image:  wordpress
     build:
@@ -27,6 +28,7 @@ services:
       - volume_wordpress:/var/www/html
     depends_on:
       - mariadb
+    restart: on-failure
   nginx_server:
     image:  nginx
     build:
@@ -39,6 +41,7 @@ services:
       - volume_wordpress:/var/www/html
     depends_on:
       - wordpress
+    restart: on-failure
 
 networks:
   inception:
