@@ -1,5 +1,5 @@
 # FROM alpine:3.18.6
-FROM debian
+FROM debian:oldstable
 
 RUN apt update -y && apt upgrade -y
 
